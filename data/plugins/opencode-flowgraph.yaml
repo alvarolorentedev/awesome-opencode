@@ -1,0 +1,104 @@
+
+name: OpenCode Flowgraph
+repo: https://github.com/alvarolorentedev/opencode-flowgraph
+tagline: Define, execute, and monitor durable multi-agent workflows using YAML graphs and native OpenCode agents.
+description: >-
+  OpenCode Flowgraph turns multi-agent development processes into
+  reusable, YAML-defined workflows. Connect native OpenCode agents
+  through conditional routing, quality gates, and feedback loops
+  without introducing a separate agent runtime.
+
+  Workflows execute sequentially with persistent checkpoints,
+  interruption recovery, and structured agent outcomes. Inspect
+  execution through interactive TUI diagrams, experimental Desktop
+  visualizations, or RPC interfaces.
+
+  Features include conditional routing, human intervention,
+  pause/resume/cancel controls, Mermaid graph generation,
+  and local-first execution with native OpenCode permissions.
+
+scope:
+  - global
+  - project
+
+tags:
+  - productivity
+  - automation
+  - multi-agent
+  - workflow
+
+homepage: https://github.com/alvarolorentedev/opencode-flowgraph
+
+installation: |
+  ## Prerequisites
+  - OpenCode V2 with `@opencode/plugin` >=2.0.32 <3
+  - Native OpenCode agents configured with models and tool access
+
+  ## Installation
+
+  Add the npm package to your `opencode.jsonc`:
+
+  ```jsonc
+  {
+    "$schema": "https://opencode.ai/config.json",
+    "plugins": ["@alvarolorentedev/opencode-flowgraph"]
+  }
+  ```
+
+  OpenCode loads the package automatically. No cloning or building
+  is required.
+
+  ## Configuration
+
+  Define agents in `.opencode/agents/` and workflows in
+  `.opencode/workflows/`.
+
+  Example workflow (`.opencode/workflows/review.yaml`):
+
+  ```yaml
+  version: 1
+  name: review
+  entry: reviewer
+
+  nodes:
+    reviewer:
+      agent: reviewer
+      routes:
+        approved: complete
+        changes_requested: pause
+        blocked: pause
+  ```
+
+  The referenced `reviewer` agent must exist and be configured
+  as a primary or all-mode agent with a model and tool access.
+
+  ## Usage
+
+  Start a workflow:
+
+  ```
+  /flowgraph run review "Review the latest changes"
+  ```
+
+  Open the interactive workflow visualization:
+
+  ```
+  /flowgraph
+  ```
+
+  The TUI supports inspecting agent sessions and pausing or
+  cancelling runs. OpenCode Desktop also provides an experimental
+  graphical workflow viewer.
+
+  ## Documentation
+
+  - [Workflow guide](https://github.com/alvarolorentedev/opencode-flowgraph/blob/main/docs/guide.md)
+  - [Ready-made examples](https://github.com/alvarolorentedev/opencode-flowgraph/tree/main/examples/.opencode)
+  - [Operations](https://github.com/alvarolorentedev/opencode-flowgraph/blob/main/docs/operations.md)
+
+  ## Removal
+
+  1. Remove `@alvarolorentedev/opencode-flowgraph` from
+     the `plugins` array in `opencode.jsonc`.
+  2. Optionally remove Flowgraph-specific workflows from
+     `.opencode/workflows/`.
